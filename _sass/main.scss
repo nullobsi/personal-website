@@ -1,11 +1,16 @@
 @import "normalize";
 
+@import url("/assets/font/newcm10/font.css"); 
+@import url("/assets/font/newcm10-sans/font.css"); 
+
 body {
   margin: 0;
+  font-family: 'NewComputerModern10';
 }
 
-#nav {
-
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'NewComputerModernSans10';
+  margin-bottom: 0;
 }
 
 :root {
@@ -14,9 +19,48 @@ body {
 }
 
 main {
-  max-width: 800px;
+  max-width: 600px;
   margin: auto;
-  padding: 20px;
+  padding: 32px;
+  padding-top: 96px;
+}
+
+#title {
+  text-align: center;
+  height: 80vh;
+  box-sizing:border-box;
+}
+
+#title > h1 {
+  padding-top: 10vh;
+}
+
+#title > p {
+  padding-top: 40vh;
+}
+
+header {
+  background-color: #eee;
+  height: 64px;
+
+  display: flex;
+  align-items: center;
+
+  position: fixed;
+  width: 100%;
+  box-sizing: border-box;
+  top: 0;
+}
+
+nav {
+  margin: auto;
+  width: 800px;
+
+  padding: 0 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 
