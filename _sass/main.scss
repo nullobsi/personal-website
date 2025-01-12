@@ -1,16 +1,24 @@
 @import "normalize";
 
 @import url("/assets/font/newcm10/font.css"); 
+@import url("/assets/font/newcm08/font.css"); 
 @import url("/assets/font/newcm10-sans/font.css"); 
+@import url('https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400..700;1,400..700&display=swap');
 
 body {
   margin: 0;
-  font-family: 'NewComputerModern10';
+  font-family: 'NewComputerModern10', serif;
+  font-optical-sizing: auto;
+  font-style: normal;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'NewComputerModernSans10';
+  font-family: 'NewComputerModernSans10', sans-serif;
   margin-bottom: 0;
+}
+
+small {
+  font-family: 'NewComputerModern08', serif;
 }
 
 :root {
@@ -22,7 +30,7 @@ main {
   max-width: 600px;
   margin: auto;
   padding: 32px;
-  padding-top: 96px;
+  padding-top: 64px;
 }
 
 #title {
@@ -63,4 +71,77 @@ nav {
   justify-content: space-between;
 }
 
+article h1 {
+  font-size: 1.5em;
+  margin-block-start: 0.67em;
+  margin-block-end: 0em;
+}
+
+article h2 {
+  font-size: 1.17em;
+  margin-block-start: 0.67em;
+  margin-block-end: 0em;
+}
+
+article h3 {
+  display: inline;
+  font-size: 1em;
+  margin-block-start: 0.67em;
+  margin-block-end: 0em;
+  margin-right: 10px;
+}
+
+article h3 + p {
+  display: inline;
+}
+
+article p {
+  margin-block-start: 0.45em;
+  margin-block-end: 0.45em;
+}
+
+
+.docview {
+  width: 100%;
+  aspect-ratio: 3/4;
+  display: block;
+  margin: 1em 0;
+}
+
+.presview {
+  width: 100%;
+  aspect-ratio: 4/3;
+  display: block;
+  margin: 1em 0;
+}
+
+@media (min-width: 996px) {
+.sidecontainer {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  column-gap: 32px;
+  grid-template-columns: [aside] 300px [content] 600px;
+}
+
+.sidecontainerrev {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  column-gap: 32px;
+  grid-template-columns: [content] 600px [aside] 300px;
+}
+
+.sidemain {
+  grid-column-start: content;
+  grid-row-start: 1;
+}
+
+.sidecontent {
+  display: flex;
+  justify-content: center;
+  grid-column-start: aside;
+  grid-row-start: 1;
+}
+}
 
