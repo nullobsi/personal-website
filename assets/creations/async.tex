@@ -1,0 +1,417 @@
+%! TeX program = lualatex
+\RequirePackage[l2tabu,orthodox]{nag}
+\DocumentMetadata{lang=en-US}
+\documentclass{beamer}
+
+% General packages
+%\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{tikz}
+%\usepackage{tikz-uml}
+\usepackage{hyperref}
+%\usepackage{caption}
+%\usepackage{subcaption}
+%\usepackage{newfloat}
+%\usepackage{fancyvrb}
+\usepackage{minted}
+\usepackage{bookmark}
+\usepackage{fontspec}
+\usepackage{microtype}
+\usepackage{ragged2e}
+\usepackage{csquotes, ellipsis}
+\usepackage{authoraftertitle}
+\usepackage{wrapfig}
+
+% Math packages
+%\usepackage[leqno]{amsmath}
+\usepackage{mathtools}
+\usepackage{amsthm}
+%\usepackage{thmtools}
+%\usepackage{derivative}
+%\usepackage{systeme}
+%\usepackage{nicematrix}
+\usepackage{lualatex-math}
+\usepackage[warnings-off={mathtools-colon,mathtools-overbracket},math-style=ISO,bold-style=ISO]{unicode-math}
+
+% Fonts
+\usepackage[default,newcmbb]{fontsetup}
+\setmonofont{0xProto}[Scale=MatchLowercase]
+\usepackage{menukeys}
+\usepackage{emoji}
+
+% Language
+\usepackage{polyglossia}
+\setdefaultlanguage[variant=american,ordinalmonthday=true]{english}
+
+\usepackage[backend=biber]{biblatex}
+
+%\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+%\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+%\declaretheorem[within=chapter]{definition}
+%\declaretheorem[sibling=definition]{theorem}
+%\declaretheorem[sibling=definition]{corollary}
+%\declaretheorem[sibling=definition]{principle}
+\usetheme{Ilmenau}
+\usecolortheme{beaver}
+\usecolortheme{whale}
+
+\setminted{obeytabs=true,tabsize=4}
+
+\day=25
+\month=9
+\year=2024
+
+\title{Async Programming}
+\author{Juan Pablo Zendejas}
+\institute{ACM@SDSU}
+\date{\today}
+
+\hypersetup{
+	pdftitle={\MyTitle},
+	pdfauthor={\MyAuthor},
+	pdfsubject={\MySubtitle},
+}
+
+\begin{document}
+
+\frame{\maketitle}
+
+\section{Intro}
+
+\subsection{About Me}
+\begin{frame}{\texttt{whoami}}
+	\begin{itemize}
+		\item 3rd year student
+		\item Secretary
+		\item Math and CS Major
+		\item Coding since 13
+	\end{itemize}
+
+\begin{tikzpicture}[remember picture, overlay]
+\node[left=1cm] at (current page.0) 
+{
+    \includegraphics[width=0.5\textwidth]{me.jpg}
+};
+\end{tikzpicture}
+
+\end{frame}
+
+\begin{frame}{Coding experience}
+	\begin{itemize}
+		\item JavaScript was my first love
+		\item Over-engineered solutions to problems
+		\item Love functional programming
+		\item Open source contributor
+	\end{itemize}
+	Solutions to my own problems on Linux
+\end{frame}
+
+\subsection{The presentation}
+
+\begin{frame}
+	\frametitle{What is an \texttt{async}?}
+	\begin{itemize}
+		\item Perform operations non-synchronously
+		\item Out of order, simultaneously, ...
+		\item Stop \emph{waiting} and do more stuff
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{The proceedings}
+	\begin{itemize}
+		\item JavaScript (web dev)
+		\item Rust (low-level, performant)
+		\item Deno (deno.land)
+		\item Async by default
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Use of \texttt{async}}
+	\begin{itemize}
+		\item Modern web APIs use async
+	\end{itemize}
+\begin{block}{JavaScript}
+	\begin{minted}{js}
+let response = await fetch("https://sdsu.edu");
+console.log(await response.text());
+	\end{minted}
+\end{block}
+	\begin{itemize}
+		\item Why design APIs this way?
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Use of \texttt{async}}
+	Many operations on computers are \emph{not} bound by CPU speed.
+	\begin{itemize}
+		\item Lot of time is spent waiting
+		\item Organize! Compute more!
+		\item Switch contexts
+	\end{itemize}
+	\includegraphics[width=\textwidth]{cpuusage.png}
+\end{frame}
+
+\section{Understanding}
+
+\subsection{Event loop}
+
+\begin{frame}
+	\frametitle{Concept of event loop}
+	\begin{itemize}
+		\item Out-of-order with only a single thread
+		\item No parallelism (in most cases...)
+	\end{itemize}
+	\begin{alertblock}{Loop}
+		\begin{enumerate}
+			\item Wait for messages
+			\item Dispatch message to method
+			\item Method now has control
+			\item Return control to loop
+		\end{enumerate}
+	\end{alertblock}
+\end{frame}
+
+\begin{frame}
+	\frametitle{in JavaScript}
+	\begin{itemize}
+		\item Interaction creates a message
+		\item Method is executed
+		\item During the method run, \alert{nothing else can happen}
+		\item Cause of lag in older sites
+	\end{itemize}
+	Taking advantage of the event loop makes web interaction smooth.
+\end{frame}
+
+\subsection{Higher order functions}
+\begin{frame}[fragile]{Now, a magic spell}
+	\begin{itemize}
+		\item Stop thinking of functions as different from data
+		\item Functions ARE data
+		\item In JS, they are even objects with properties
+	\end{itemize}
+\begin{example}
+\begin{minted}{js}
+console.log.name
+console.log.toString()
+\end{minted}
+\end{example}
+\end{frame}
+
+\begin{frame}[fragile]{Functions of functions}
+	\begin{itemize}
+		\item Pass around functions
+		\item Return functions
+		\item Compose functions
+	\end{itemize}
+\begin{block}{JavaScript}
+\begin{minted}{js}
+function createAdder(n) {
+	return (x) => x+n;
+}
+
+const addtwo = createAdder(2);
+const result = addtwo(6);
+console.log(result); // 8
+\end{minted}
+\end{block}
+\end{frame}
+
+\subsection{Usage in JS}
+
+\begin{frame}
+	\frametitle{Promises}
+	JavaScript uses an abstraction called a \alert{\texttt{Promise}} for
+	asynchronous programming.
+
+	\begin{itemize}
+		\item Represents an operation to be completed
+		\item We call this \alert{fulfilled}
+		\item Or, can be \alert{rejected}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Promises}
+
+	\begin{block}{JavaScript}
+	\begin{minted}[escapeinside=||,beameroverlays=true]{js}
+|\onslide<1->|const myPromise = new Promise((resolve, reject) => {
+|\onslide<2->|	setTimeout(() => {
+|\onslide<2->|		resolve("I'm done!");
+|\onslide<2->|	}, 300);
+|\onslide<1->|});
+
+|\onslide<3->|myPromise
+	.then(console.log)
+	.then(handlePromise)
+|\onslide<4->|	.catch(console.error);
+	\end{minted}
+	\end{block}
+
+\onslide<5->
+	\begin{itemize}
+		\item We use \alert{chaining}
+	\end{itemize}
+\end{frame}
+
+\section{Abstraction}
+
+\subsection{\texttt{await} in JS}
+
+\begin{frame}[fragile]{The \texttt{await} keyword}
+	\begin{itemize}
+		\item \texttt{.then} chaining is messy
+		\item Abstract it away using \emph{syntax sugar}
+	\end{itemize}
+\begin{block}{JavaScript (cont.)}
+\begin{minted}{js}
+async function handlePromise() {
+	try {
+		console.log(await myPromise);
+	} catch (e) {
+		console.error(e);
+	}
+}
+\end{minted}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]{When to use \texttt{await}}
+	\begin{itemize}
+		\item We don't always want to wait
+		\item Other functions can manipulate Promises
+	\end{itemize}
+\begin{block}{JavaScript}
+\begin{minted}{js}
+const p1 = fetch("https://sdsu.edu");
+const p2 = fetch("https://acm.sdsu.edu");
+
+const both = Promise.all([p1, p2]);
+const [res1, res2] = await both;
+\end{minted}
+\end{block}
+\end{frame}
+
+\subsection{Asynchronous APIs}
+
+\begin{frame}{API design}
+	\begin{itemize}
+		\item Deno and Bun are \texttt{async}-first
+		\item No need to enter an async context
+		\item \texttt{Deno.open}, \texttt{Deno.connect}
+	\end{itemize}
+	Make I/O operations \alert{non-blocking} so more requests can be
+	handled.
+
+	\begin{figure}[ht]
+		\centering
+		\includegraphics[width=0.3\textwidth]{benchmark.png}
+		\caption{Bun and Deno perform better}
+	\end{figure}
+\end{frame}
+
+\begin{frame}
+\begin{tikzpicture}[remember picture, overlay]
+\node[left=0.5cm] at (current page.20) 
+{
+    \includegraphics[width=0.25\textwidth]{ie.pdf}
+};
+\node[left=0.5cm] at (current page.-20) 
+{
+    \includegraphics[width=0.25\textwidth]{chrome.pdf}
+};
+\end{tikzpicture}
+	\begin{itemize}
+		\item New Web APIs are almost all asynchronous
+		\item Open files, download webpages
+		\item Ancient history: XMLHttpRequest
+		\item Horrid to use, but set the foundation
+	\end{itemize}
+\end{frame}
+
+\subsection{In other languages}
+
+\begin{frame}{Futures}
+\begin{tikzpicture}[remember picture, overlay]
+\node[left=0.5cm] at (current page.0) 
+{
+    \includegraphics[width=0.25\textwidth]{rust.pdf}
+};
+\end{tikzpicture}
+	\begin{itemize}
+		\item The concept of a Promise is very powerful
+		\item Rust borrowed the idea, called it \enquote{Futures}
+		\item
+			\href{https://rust-lang.github.io/async-book/}{rust-lang.github.io/async-book}
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Futures}
+\begin{block}{Rust}
+\begin{minted}{rust}
+async fn get_two_sites_async() {
+    // Create two different "futures" which,
+	// when run to completion,
+    // will asynchronously download the webpages.
+    let future_one = download_async("https://foo.com");
+    let future_two = download_async("https://bar.com");
+
+    // Run both futures to completion at the same time.
+    join!(future_one, future_two);
+}
+\end{minted}
+\end{block}
+
+(from the Rust book)
+	
+\end{frame}
+
+\begin{frame}[fragile]{Tasks}
+	\begin{itemize}
+		\item In C\#, we call them \texttt{Task}s
+		\item Probably work the closest to Promises
+	\end{itemize}
+	\begin{block}{C\#}
+\begin{minted}{csharp}
+List<Task> myTasks;
+while (myTasks.Count > 0) {
+	Task finishedTask = await Task.WhenAny(myTasks);
+	var value = await finishedTask;
+	Console.WriteLine("Task finished: " + value);
+	myTasks.Remove(finishedTask);
+}
+\end{minted}
+	\end{block}
+(adapted from MSDN)
+\end{frame}
+
+\section{Conclusion}
+\begin{frame}{Why is async important}
+	\begin{itemize}
+		\item Create faster programs
+		\item Servers can handle multiple requests
+		\item Break free from sequential programming
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Further exploration}
+	\begin{itemize}
+		\item Write a web server in JS (Deno, Bun)
+		\item Use threading in Rust to perform complex calculations
+		\item Find asynchronous principles in your favorite language
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Thank you!}
+
+	\centering
+	\includegraphics[width=0.5\textwidth]{acm.pdf}
+	
+\end{frame}
+
+\end{document}
