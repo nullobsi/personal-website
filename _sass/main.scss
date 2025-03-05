@@ -121,6 +121,20 @@ article p {
   margin: 1em 0;
 }
 
+.pdfdownload::before {
+  content: url('/assets/PDF.svg');
+  height: 1em;
+  width: 1em;
+  display: inline-block;
+}
+
+.texdownload::before {
+  content: url('/assets/TeX.svg');
+  height: 1em;
+  width: 1em;
+  display: inline-block;
+}
+
 @media (min-width: 996px) {
 .sidecontainer {
   display: grid;
@@ -150,4 +164,5 @@ article p {
   grid-row-start: 1;
 }
 }
+
 
