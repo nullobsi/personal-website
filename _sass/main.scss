@@ -33,10 +33,26 @@ main {
   padding-top: 64px;
 }
 
+#title > hr {
+  display: block;
+  height: 2px;
+  border: 0;
+  border-top: 1px solid black;
+  margin: 1em 0;
+  padding: 0;
+}
+
 #title {
   text-align: center;
   height: 80vh;
   box-sizing:border-box;
+}
+
+#title > small {
+  display: block;
+  margin: 0 1em;
+  width: 100%;
+  text-align: start;
 }
 
 #title > h1 {
@@ -133,6 +149,14 @@ article p {
   height: 1em;
   width: 1em;
   display: inline-block;
+}
+
+li.major {
+  font-weight: bold;
+};
+
+li.major::marker {
+  content: "★ ";
 }
 
 @media (min-width: 996px) {

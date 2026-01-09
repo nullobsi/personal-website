@@ -1,0 +1,111 @@
+%MSC Primary: 11B39
+\documentclass{article}
+\usepackage{maa-monthly}
+\usepackage{comment}
+
+
+
+\raggedbottom
+%\flushbottom
+%\final
+
+%\setcounter{annual}{XXXX}
+%\setcounter{volume}{XXX}
+%\setcounter{issue}{X}
+%\setcounter{page}{XXX}
+
+\allowdisplaybreaks
+
+%\theoremstyle{theorem}
+%\newtheorem{theorem}{Theorem}[section]
+
+\theoremstyle{plain}
+\newtheorem*{theorem}{Theorem}
+
+
+\begin{document}
+\begin{filler}
+[white]
+
+\noindent {\large \bf \textsf{Wolstenholme's Congruence for Lucas Sequences}}\\
+
+
+\noindent
+The recent paper \cite{he-mao-togbe} in this Monthly showed
+that $\sum_{k=1}^{p-1} \frac{1}{F_k^2} \equiv 0 \pmod{F_p}$ for any odd
+prime $p$, a variation of a well-known result of Wolstenholme. Below we
+show a similar result involving both Fibonacci numbers and Lucas
+numbers. Recall that the Lucas sequence $L_n$ has the same recursive
+relationship as the Fibonacci sequence, but with different starting
+values, namely $L_1 = 1$, $L_2 = 3$. Here $a/b \equiv 0
+\pmod{n}$ means that $\gcd(b, n) = 1$ and $a \equiv 0 \pmod{n}$.
+
+\begin{theorem}
+If $p$ is an odd prime, then $\sum_{k=1}^{p-1} \frac{1}{L_k^2} \equiv 0 \pmod{F_p}.$
+\end{theorem}
+
+\begin{proof}
+    We rewrite the sum as follows:
+
+    \vspace{-14pt}
+    \begin{displaymath}
+    \sum_{k=1}^{p-1} \frac{1}{L_k^2} = 
+    \sum_{k=1}^{\frac{p-1}{2}} \left(\frac{1}{L_k^2} + \frac{1}{L_{p-k}^2}\right) = 
+    \sum_{k=1}^{\frac{p-1}{2}} \frac{L_k^2 + L_{p-k}^2}{L_k^2L_{p-k}^2}.
+    \end{displaymath}
+
+    It suffices to show that each term of this sum is congruent to $0 \pmod{F_p}$.
+	Let $1 \leq k \leq \frac{p-1}{2}$.
+	We first show that each denominator is coprime to $F_p$. Since $p$ is an odd prime, we have that $\gcd(2k, p) = 1$. By strong divisibility of the Fibonacci sequence, we get $\gcd(F_{2k}, F_p) = F_1 = 1$. %reference?
+    Applying the identity $F_{2k} = F_kL_k$ then yields $\gcd(L_k, F_p) = 1$; hence $\gcd(L_k^2L_{p-k}^2, F_p) = 1$ as required.
+    
+    We now show that $L_k^2+L_{p-k}^2 \equiv 0 \pmod{F_p}$. Applying the identity $L_n = F_{n+1} + F_{n-1}$ gives
+
+    \vspace{-16pt}
+	\begin{equation}
+    	\label{numerator}
+		\begin{split}
+			L_k^2+L_{p-k}^2 & = (F_{k+1}+F_{k-1})^2+(F_{p-k-1}+F_{p-k+1})^2 \\
+			& = (F_{k+1}^2+F_{p-(k+1)}^2)+(F_{k-1}^2+F_{p-(k-1)}^2) \\
+			% How to align this properly?
+			&    \hspace{45pt}        +2(F_{k+1}F_{k-1}+F_{p-k-1}F_{p-k+1}).
+		\end{split}
+	\end{equation}
+
+
+    Applying Cassini's identity, $F_{n-1}F_{n+1} = (-1)^n+F_n^2$, to the
+	final term gives
+
+    \vspace{-16pt}
+    \begin{equation} 
+    \label{last_term}
+    F_{k+1}F_{k-1}+F_{p-k-1}F_{p-k+1} =
+	(F_k^2+F_{p-k}^2)+((-1)^k+(-1)^{p-k}).
+    \end{equation}
+
+    Since $p$ is odd, it follows from Catalan's identity that
+	$F_n^2+F_{p-n}^2 = F_pF_{p-2n}$ for all $n \in \mathbb{N}$. This
+	implies that the first two terms of (\ref{numerator}), as well as
+	the first term of the right-hand side of (\ref{last_term}), are
+	congruent to $0 \pmod{F_p}$. Therefore $L_k^2+L_{p-k}^2 \equiv
+	2((-1)^k+(-1)^{p-k}) \equiv 2 (-1)^k ( 1 + (-1)^p) = 0 \pmod{F_p}$.
+\end{proof}
+%\vspace{-16pt}
+\begin{thebibliography}{9}
+\bibitem{he-mao-togbe}
+B. He, Y. L. Mao \& A. Togbé. (2023). A Fibonacci Version of Wolstenholme's Harmonic Series Congruence, Amer. Math. Monthly, 130:1, 83-85, DOI: 10.1080/00029890.2022.2128165
+\end{thebibliography}
+\rightline{---Submitted by Emi Lycan, Vadim
+Ponomarenko, and Juan Pablo Zendejas}
+\rightline{of San Diego State University}
+
+\bigskip
+\footnoterule
+\footnotesize{doi.org/10.XXXX/amer.math.monthly.122.XX.XXX}
+
+\footnotesize{MSC: Primary 11B39, Secondary 11B50; 11A41}
+
+\end{filler}
+
+\end{document}
+
